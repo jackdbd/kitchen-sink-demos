@@ -1,0 +1,10 @@
+# environment variables
+.envrc
+
+# build artifacts
+dist/
+
+# dependencies
+node_modules/
+
+.vercel/

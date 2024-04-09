@@ -1,0 +1,17 @@
+{
+  "name": "kitchen-sink-demos",
+  "type": "module",
+  "private": true,
+  "author": "Giacomo Debidda <giacomo@giacomodebidda.com> (https://giacomodebidda.com/)",
+  "license": "MIT",
+  "scripts": {
+    "build": "rm -rf dist && mkdir dist && cp -r public/* dist",
+    "dev": "vercel --help",
+    "serve": "http-server ./dist --port 5000"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "http-server": "latest",
+    "vercel": "latest"
+  }
+}
