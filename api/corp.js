@@ -36,6 +36,7 @@ export async function GET(request, ctx) {
     });
   }
 
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cross-Origin_Resource_Policy
   const corp = "same-site";
 
   // const image_url_test = `https://corsproxy.io/?https://www.w3schools.com/images/w3schools_green.jpg`;
