@@ -2,39 +2,20 @@ export const config = {
   runtime: "edge",
 };
 
-const errorPage = (err) => {
-  const head = ```
-  <meta charset="UTF-8">
-  <title>COEP demo error</title>
-  <meta name="description" content="COEP demo">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/mvp.css">
-  ```;
-
-  const body = ```
-  <h1>COEP demo error</h1>
-  <p>${err.message || "Error"}</p>
-  ```;
-
-  const html = ```
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>${head}</head>
-  <body>${body}</body>
-  ```;
-
-  return html;
-};
-
 export async function GET(request, ctx) {
   // Vercel logs include a request ID. But this Request object has no ID. Why?
   const req_id = Math.random().toString(36).substring(7);
   const prefix = `[req_id ${req_id}]`;
-  // const [_, qs] = request.url.split("?");
-  // console.debug(`${prefix} query string`, qs);
 
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Embedder-Policy
   const coep = "require-corp";
+
+  const report_uri_subdomain = `giacomodebidda`;
+  const report_to = {
+    endpoint_name: "coep_report",
+    endpoint_url: `https://${report_uri_subdomain}.report-uri.com/a/d/g`,
+  };
+
   const title = `COEP: ${coep}`;
   const description = `Demo of Cross-Origin-Embedder-Policy: ${coep}`;
 
@@ -54,44 +35,10 @@ export async function GET(request, ctx) {
   // https://tools.woolyss.com/html5-audio-video-tester/
   const video_src = "https://woolyss.com/f/vp9-vorbis-spring.webm";
 
-  // let res;
-  // try {
-  //   res = await fetch(image_url);
-  //   body_elems.push(
-  //     `<li><p style="color: green;">image fetched successfully</p></li>`
-  //   );
-  // } catch (err) {
-  //   console.error(`${prefix} could not fetch ${image_url}`);
-  //   body_elems.push(`<li><p style="color: red;">${err.message}</p></li>`);
-  //   // return new Response(errorPage(err), {
-  //   //   status: 400,
-  //   // });
-  // }
-
-  // let blob;
-  // try {
-  //   blob = await res.blob();
-  //   console.debug(`${prefix} blob.size`, blob.size);
-  //   if (blob.size === 0) {
-  //     throw new Error("blob.size is 0");
-  //   }
-  //   body_elems.push(
-  //     `<li><p style="color: green;">image data accessed successfully</p></li>`
-  //   );
-
-  //   // const img = document.createElement("img");
-  //   // img.src = URL.createObjectURL(blob);
-  //   // container.value.appendChild(img);
-  //   // ol.classList.add("success");
-  // } catch (err) {
-  //   body_elems.push(`<li><p style="color: red;">${err.message}</p></li>`);
-  // }
-
-  // body_elems.push("</ol>");
-
   const body = `
   <h1>${title}</h1>
   <p>Cross-origin embedding (image)</p>
+  <p>COEP reports will be sent to the <code>${report_to.endpoint_name}</code> endpoint hosted at <code>${report_to.endpoint_url}</code></p>
   <img src="${img_src}" alt="${img_alt}">
   <p>Cross-origin embedding (video)</p>
   <video width=${video_width} height=${video_height} autoplay loop muted>
@@ -106,13 +53,22 @@ export async function GET(request, ctx) {
   <head>${head}</head>
   <body>${body}</body>`;
 
+  const reporting_endpoints = [
+    `${report_to.endpoint_name}="${report_to.endpoint_url}"`,
+    `default="https://${report_uri_subdomain}.report-uri.com/a/d/g"`,
+  ];
+  console.debug(`${prefix} Reporting-Endpoints`, reporting_endpoints);
+  const report_to_header = `{"group":"default","max_age":31536000,"endpoints":[{"url":"https://${report_uri_subdomain}.report-uri.com/a/d/g"}],"include_subdomains":true}`;
+  console.debug(`${prefix} Report-To`, report_to_header);
+
   console.info(`${prefix} serving HTML`);
   return new Response(html, {
     status: 200,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
-      // "Access-Control-Allow-Origin": "*",
-      "Cross-Origin-Embedder-Policy": `${coep}`,
+      "Cross-Origin-Embedder-Policy": `${coep}; report-to="${report_to.endpoint_name}"`,
+      "Reporting-Endpoints": reporting_endpoints.join(", "),
+      "Report-To": report_to_header,
     },
   });
 }
