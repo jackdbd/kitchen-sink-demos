@@ -6,15 +6,18 @@ export const config = {
 
 export async function GET(request, ctx) {
   const prefix = `[req_id ${requestId()}]`;
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy
-  const coop = "same-origin";
 
-  const title = `COOP: ${coop}`;
-  const description = `Demo of Cross-Origin-Opener-Policy: ${coop}`;
+  // https://web.dev/articles/cross-origin-isolation-guide
+  // https://developer.mozilla.org/en-US/docs/Web/API/crossOriginIsolated
+  const title = `Cross-origin isolation`;
+  const description = `Demo of cross-origin isolation`;
 
-  // If a cross-origin document with COOP is opened in a new window,
-  // the opening document will not have a reference to it, and the window.opener
-  // property of the new window will be null.
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer
+  // const sab =new SharedArrayBuffer()
+
+  // https://web.dev/articles/monitor-total-page-memory-usage
+  // https://developer.mozilla.org/en-US/docs/Web/API/Performance/measureUserAgentSpecificMemory
+  // performance.measureUserAgentSpecificMemory().then(console.log)
 
   const script = `
   <script>
@@ -29,8 +32,6 @@ export async function GET(request, ctx) {
     }
   });
   </script>`;
-
-  // <p>Vercel region <code>${process.env.VERCEL_REGION}</code></p>
 
   const body = `
   <header>
@@ -47,6 +48,7 @@ export async function GET(request, ctx) {
   <main>
     <p>${description}</p>
     <p>COOP reports will be sent to Report URI</p>
+    <p>COEP reports will be sent to Report URI</p>
     <div id="cross-origin-isolated-check"></div>
   </main>
   ${script}`;
@@ -66,6 +68,7 @@ export async function GET(request, ctx) {
     status: 200,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
+      "Cross-Origin-Embedder-Policy": `require-corp; report-to="coep_report"`,
       "Cross-Origin-Opener-Policy": `same-origin; report-to="coop_report"`,
       "Reporting-Endpoints": reporting_endpoints.join(", "),
       "Report-To": reportTo({ report_uri_subdomain }),
