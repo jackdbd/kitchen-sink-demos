@@ -36,7 +36,7 @@ export async function GET(request, ctx) {
   <header>
     <nav>
       <ul>
-        <li><a href="/">Home</li>
+        <li><a href="/">Home</a></li>
         <li><a href="/api/coop">/api/coop</a></li>
         <li><a href="/api/coep">/api/coep</a></li>
         <li><a href="/api/coop-coep">/api/coop-coep</a></li>

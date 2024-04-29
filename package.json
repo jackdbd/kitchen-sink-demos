@@ -6,12 +6,12 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf dist && mkdir dist && cp -r public/* dist",
-    "dev": "vercel --help",
-    "serve": "http-server ./dist --port 5000"
+    "preserve": "cp serve.json dist/serve.json",
+    "serve": "serve dist/ -p 5000"
   },
   "dependencies": {},
   "devDependencies": {
-    "http-server": "latest",
-    "vercel": "latest"
+    "serve": "^14.2.3",
+    "vercel": "^34.1.4"
   }
 }

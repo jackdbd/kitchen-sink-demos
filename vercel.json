@@ -2,5 +2,20 @@
   "buildCommand": "npm run build",
   "installCommand": "npm install --omit=dev",
   "outputDirectory": "dist",
+  "headers": [
+    {
+      "source": "/permissions-policy-demos/autoplay.html",
+      "headers": [
+        {
+          "key": "Reporting-Endpoints",
+          "value": "default=\"https://giacomodebidda.uriports.com/reports\""
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "autoplay=(), camera=(self), fullscreen=*; report-to=\"default\""
+        }
+      ]
+    }
+  ],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }

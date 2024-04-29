@@ -1,0 +1,30 @@
+{
+  "headers": [
+    {
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Reporting-Endpoints",
+          "value": "default=\"https://giacomodebidda.uriports.com/reports\", csp=\"https://giacomodebidda.uriports.com/reports\", permissions-policy=\"https://giacomodebidda.uriports.com/reports\""
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "base-uri 'self'; default-src 'none'; img-src 'self'; media-src 'self'; script-src 'self'; style-src 'self' https://unpkg.com/mvp.css; report-to default;"
+        }
+      ]
+    },
+    {
+      "source": "/permissions-policy-demos/autoplay.html",
+      "headers": [
+        {
+          "key": "Reporting-Endpoints",
+          "value": "default=\"https://giacomodebidda.uriports.com/reports\""
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "autoplay=(), camera=(self), fullscreen=*; report-to=\"default\""
+        }
+      ]
+    }
+  ]
+}
